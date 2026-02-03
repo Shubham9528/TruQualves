@@ -127,6 +127,30 @@ const UserManagementView: React.FC = () => {
     }
   };
 
+  const handleDelete = async (userId: string) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+
+    try {
+      setActionLoading(userId);
+      const token = await currentUser?.getIdToken();
+      if (!token) return;
+
+      await axios.delete(`${API_URL}/api/admin/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setUsers(prev => prev.filter(u => u._id !== userId));
+    } catch (err: unknown) {
+      console.error('Error deleting user:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      alert('Failed to delete user: ' + errorMessage);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
 
   const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
@@ -262,6 +286,13 @@ const UserManagementView: React.FC = () => {
                               Re-activate
                             </button>
                         )}
+                        <button
+                          onClick={() => handleDelete(user._id)}
+                          disabled={actionLoading === user._id || user.role === 'superadmin'}
+                          className="px-3 py-1.5 text-rose-700 hover:bg-rose-50 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))
