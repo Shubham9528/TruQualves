@@ -2,8 +2,20 @@ import admin from "firebase-admin";
 import { createRequire } from "module";
 import User from "../model/User.js";
 
-const require = createRequire(import.meta.url);
-const serviceAccount = require("../firebasekeys.json");
+const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+let serviceAccount;
+
+if (serviceAccountJson) {
+  try {
+    serviceAccount = JSON.parse(serviceAccountJson);
+  } catch (error) {
+    console.error("Invalid FIREBASE_SERVICE_ACCOUNT_JSON:", error);
+    throw error;
+  }
+} else {
+  const require = createRequire(import.meta.url);
+  serviceAccount = require("../firebasekeys.json");
+}
 
 // Prevent multiple initializations
 if (!admin.apps.length) {
