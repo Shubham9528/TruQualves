@@ -8,9 +8,21 @@ interface HeaderProps {
   toggleSidebar: () => void;
 }
 
+import { useAuth } from '../../context';
+
+// ...
+
 export const Header: React.FC<HeaderProps> = ({ activeView, toggleSidebar }) => {
+  const { currentUser, userProfile } = useAuth();
+
+  const getInitials = (email: string) => {
+    return email ? email.substring(0, 2).toUpperCase() : 'U';
+  };
+
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-8 h-16 flex items-center justify-between">
+      {/* ... existing search code ... */}
+      
       <div className="flex items-center gap-3 md:gap-4">
         <button 
           onClick={toggleSidebar}
@@ -37,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({ activeView, toggleSidebar }) => 
       </div>
 
       <div className="flex items-center gap-1 md:gap-3">
-        {/* Search Toggle for Mobile (Simplified for this version) */}
+        {/* Search Toggle for Mobile */}
         <button className="sm:hidden p-2 text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
           <ICONS.Search size={20} />
         </button>
@@ -51,11 +63,19 @@ export const Header: React.FC<HeaderProps> = ({ activeView, toggleSidebar }) => 
         
         <button className="flex items-center gap-2 p-1 pl-2 hover:bg-slate-50 rounded-lg transition-colors group">
           <div className="text-right hidden md:block">
-            <p className="text-xs font-semibold text-slate-800">Alex Anderson</p>
-            <p className="text-[10px] text-slate-500">Compliance Officer</p>
+            <p className="text-xs font-semibold text-slate-800">
+              {currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User'}
+            </p>
+            <p className="text-[10px] text-slate-500 capitalize">
+              {userProfile?.role || 'Guest'}
+            </p>
           </div>
-          <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold overflow-hidden shrink-0">
-             <img src="https://picsum.photos/seed/user1/40" alt="Avatar" />
+          <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold overflow-hidden shrink-0 border border-teal-200">
+             {currentUser?.photoURL ? (
+               <img src={currentUser.photoURL} alt="Avatar" className="w-full h-full object-cover" />
+             ) : (
+               <span>{getInitials(currentUser?.email || '')}</span>
+             )}
           </div>
         </button>
       </div>

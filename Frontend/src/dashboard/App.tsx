@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import DashboardView from './views/DashboardView';
 import BlogsView from './views/BlogsView';
+import UserManagementView from './views/UserManagementView';
 import type { ViewType } from './types';
 import { ICONS } from './constants';
 
@@ -48,6 +49,8 @@ const App: React.FC = () => {
         return <DashboardView />;
       case 'Blogs':
         return <BlogsView />;
+      case 'Users':
+        return <UserManagementView />;
       case 'Settings':
         return <PlaceholderView title="Account Settings" description="Manage your compliance profile, notification preferences, and API integration keys here." />;
       case 'Support':

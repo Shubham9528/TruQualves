@@ -2,6 +2,7 @@
 import React from 'react';
 import { ICONS } from '../constants';
 import type { ViewType } from '../types';
+import { useAuth } from '../../context';
 
 interface SidebarProps {
   activeView: ViewType;
@@ -11,15 +12,30 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isOpen, setIsOpen }) => {
+  const { userProfile, currentUser, logout } = useAuth();
+
   const mainNavItems: { label: ViewType; icon: keyof typeof ICONS }[] = [
     { label: 'Dashboard', icon: 'LayoutDashboard' },
     { label: 'Blogs', icon: 'BookOpen' }
   ];
 
+  // Add Users menu for admins
+  if (userProfile?.role === 'admin' || userProfile?.role === 'superadmin') {
+    mainNavItems.push({ label: 'Users', icon: 'Users' });
+  }
+
   const secondaryNavItems: { label: ViewType; icon: keyof typeof ICONS }[] = [
     { label: 'Settings', icon: 'Settings' },
     { label: 'Support', icon: 'HelpCircle' }
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   const NavButton: React.FC<{ item: { label: ViewType; icon: keyof typeof ICONS } }> = ({ item }) => {
     const Icon = ICONS[item.icon];
@@ -93,20 +109,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
 
         {/* Footer info or profile teaser */}
         <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <button className={`w-full flex items-center p-3 rounded-xl transition-all text-rose-500 hover:bg-rose-50 mb-3 group ${!isOpen && 'lg:justify-center'}`}>
+          <button 
+            onClick={handleLogout}
+            className={`w-full flex items-center p-3 rounded-xl transition-all text-rose-500 hover:bg-rose-50 mb-3 group ${!isOpen && 'lg:justify-center'}`}
+          >
             <ICONS.LogOut size={20} className="group-hover:scale-110 transition-transform shrink-0" />
             <span className={`ml-3 font-semibold text-sm transition-all duration-200 
               ${isOpen ? 'opacity-100' : 'lg:opacity-0 lg:w-0 overflow-hidden'}`}>Logout</span>
           </button>
 
           <div className={`flex items-center ${isOpen ? 'px-1' : 'lg:justify-center'}`}>
-            <div className="w-10 h-10 rounded-xl bg-slate-200 overflow-hidden ring-2 ring-white shadow-sm shrink-0">
-              <img src="https://picsum.photos/seed/user1/40" alt="Profile" className="w-full h-full object-cover" />
+            <div className="w-10 h-10 rounded-xl bg-slate-200 overflow-hidden ring-2 ring-white shadow-sm shrink-0 flex items-center justify-center text-slate-500 font-bold">
+              {/* <img src="https://picsum.photos/seed/user1/40" alt="Profile" className="w-full h-full object-cover" /> */}
+              {currentUser?.email?.substring(0, 2).toUpperCase() || 'US'}
             </div>
             <div className={`ml-3 overflow-hidden transition-all duration-200 
               ${isOpen ? 'opacity-100' : 'lg:opacity-0 lg:w-0 overflow-hidden'}`}>
-              <p className="text-sm font-bold text-slate-800 truncate">Alex Anderson</p>
-              <p className="text-[10px] font-medium text-slate-500 truncate">Senior Lead</p>
+              <p className="text-sm font-bold text-slate-800 truncate" title={currentUser?.email || ''}>
+                {currentUser?.email?.split('@')[0] || 'User'}
+              </p>
+              <p className="text-[10px] font-medium text-slate-500 truncate capitalize">
+                {userProfile?.role || 'Guest'}
+              </p>
             </div>
           </div>
         </div>

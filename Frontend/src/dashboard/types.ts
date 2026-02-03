@@ -26,7 +26,16 @@ export interface BlogPost {
   image: string;
 }
 
-export type ViewType = 'Dashboard' | 'Blogs' | 'Settings' | 'Support';
+export type ViewType = 'Dashboard' | 'Blogs' | 'Users' | 'Settings' | 'Support';
+
+export interface User {
+  _id: string;
+  email: string;
+  role: 'superadmin' | 'admin' | 'user';
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+}
+
 
 export interface BackendBlog {
   id: number;
