@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import { useAuth } from '../../context';
 import { ICONS } from '../constants';
 import type { User } from '../types';
@@ -19,17 +20,11 @@ const UserManagementView: React.FC = () => {
       const token = await currentUser?.getIdToken();
       if (!token) return;
 
-      const response = await fetch(`${API_URL}/api/admin/users`, {
+      const { data } = await axios.get(`${API_URL}/api/admin/users`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch users');
-      }
-
-      const data = await response.json();
       setUsers(data.users || []);
     } catch (err: unknown) {
       console.error('Error fetching users:', err);
@@ -50,17 +45,16 @@ const UserManagementView: React.FC = () => {
       const token = await currentUser?.getIdToken();
       if (!token) return;
 
-      const response = await fetch(`${API_URL}/api/admin/users/${userId}/approve`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      await axios.patch(
+        `${API_URL}/api/admin/users/${userId}/approve`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to approve user');
-      }
+      );
 
       // Refresh users list locally to reflect changes immediately
       setUsers(users.map(u => 
@@ -81,17 +75,16 @@ const UserManagementView: React.FC = () => {
       const token = await currentUser?.getIdToken();
       if (!token) return;
 
-      const response = await fetch(`${API_URL}/api/admin/users/${userId}/reject`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      await axios.patch(
+        `${API_URL}/api/admin/users/${userId}/reject`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to reject user');
-      }
+      );
 
       setUsers(users.map(u => 
         u._id === userId ? { ...u, status: 'rejected' } : u
@@ -111,18 +104,16 @@ const UserManagementView: React.FC = () => {
       const token = await currentUser?.getIdToken();
       if (!token) return;
 
-      const response = await fetch(`${API_URL}/api/admin/users/${userId}/role`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ role: newRole })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update role');
-      }
+      await axios.patch(
+        `${API_URL}/api/admin/users/${userId}/role`,
+        { role: newRole },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
       setUsers(users.map(u => 
         u._id === userId ? { ...u, role: newRole } : u
@@ -256,7 +247,7 @@ const UserManagementView: React.FC = () => {
                         {user.status === 'approved' && (
                            <button
                               onClick={() => handleReject(user._id)}
-                              disabled={actionLoading === user._id}
+                              disabled={actionLoading === user._id || user.role === 'superadmin'}
                               className="px-3 py-1.5 text-red-600 hover:bg-red-50 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
                             >
                               Suspend
