@@ -98,7 +98,7 @@ const UserManagementView: React.FC = () => {
     }
   }
 
-  const handleRoleChange = async (userId: string, newRole: 'admin' | 'user') => {
+  const handleRoleChange = async (userId: string, newRole: 'superadmin' | 'admin' | 'user') => {
     try {
       setActionLoading(userId);
       const token = await currentUser?.getIdToken();
@@ -234,13 +234,12 @@ const UserManagementView: React.FC = () => {
                       <td className="p-4">
                         <select 
                           value={user.role}
-                          onChange={(e) => handleRoleChange(user._id, e.target.value as 'admin' | 'user')}
+                          onChange={(e) => handleRoleChange(user._id, e.target.value as 'superadmin' | 'admin' | 'user')}
                           className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2"
                         >
                           <option value="user">User</option>
                           <option value="admin">Admin</option>
-                          {/* Superadmin usually can't be assigned via UI easily to prevent lockout, or maybe allow it */}
-                          <option value="superadmin" disabled>Super Admin</option>
+                          <option value="superadmin">Super Admin</option>
                         </select>
                       </td>
                       <td className="p-4">
