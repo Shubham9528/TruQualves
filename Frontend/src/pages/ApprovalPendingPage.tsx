@@ -1,9 +1,31 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export default function ApprovalPendingPage() {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, userProfile, loading, logout, refreshProfile } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      refreshProfile();
+    }
+  }, [currentUser, refreshProfile]);
+
+  useEffect(() => {
+    if (loading) return;
+    if (!currentUser) {
+      navigate('/login', { replace: true });
+      return;
+    }
+    if (userProfile?.status === 'approved') {
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+    if (userProfile?.status === 'rejected') {
+      navigate('/access-denied', { replace: true });
+    }
+  }, [currentUser, userProfile, loading, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -86,3 +108,19 @@ export default function ApprovalPendingPage() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

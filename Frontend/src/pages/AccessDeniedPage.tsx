@@ -1,9 +1,25 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export default function AccessDeniedPage() {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, userProfile, loading, logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!currentUser) {
+      navigate('/login', { replace: true });
+      return;
+    }
+    if (userProfile?.status === 'approved') {
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+    if (userProfile?.status === 'pending') {
+      navigate('/approval-pending', { replace: true });
+    }
+  }, [currentUser, userProfile, loading, navigate]);
 
   const handleLogout = async () => {
     try {

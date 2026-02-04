@@ -18,7 +18,6 @@ export const syncUser = async (req, res) => {
           role: "user", // Default role
           status: "pending", // Default status
         });
-        console.log(`New user created: ${email}`);
         return res.status(201).json({ success: true, user, isNew: true });
       } catch (error) {
         // Handle duplicate key error (Race condition)
