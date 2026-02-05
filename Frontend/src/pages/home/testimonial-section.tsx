@@ -24,7 +24,13 @@ export default function TestimonialSection() {
                                 {testimonial.quote}
                             </p>
                             <div className='flex items-center gap-2 pt-3'>
-                                <img className='size-10 rounded-full object-cover' src={testimonial.image} alt={testimonial.name} />
+                                <img
+                                    className="size-10 rounded-full object-cover"
+                                    src={testimonial.image}
+                                    alt={testimonial.name}
+                                    loading="lazy"
+                                    decoding="async"
+                                />
                                 <div>
                                     <p className="font-medium text-gray-800">{testimonial.name}</p>
                                     <p className="text-xs text-zinc-500">{testimonial.handle}</p>

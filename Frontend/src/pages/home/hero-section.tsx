@@ -9,12 +9,20 @@ export default function HeroSection() {
             <div className="max-w-7xl mx-auto flex flex-col items-center justify-center h-screen">
                 <AnimatedContent reverse distance={30} className="flex items-center gap-2 bg-white/50 backdrop-blur p-1 rounded-full">
                     <div className="flex items-center -space-x-3">
-                        <img className="size-7 rounded-full border-2 border-white"
+                        <img
+                            className="size-7 rounded-full border-2 border-white"
                             src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=50"
-                            alt="clientImage1" />
-                        <img className="size-7 rounded-full border-2 border-white"
+                            alt="clientImage1"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <img
+                            className="size-7 rounded-full border-2 border-white"
                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=50"
-                            alt="clientImage2" />
+                            alt="clientImage2"
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </div>
                     <span>500+</span>
                     <div className="h-5 w-px mx-1 bg-white rounded-full" />
@@ -50,6 +58,8 @@ export default function HeroSection() {
                                 alt="mouse-arrow"
                                 width={24}
                                 height={24}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </AnimatedContent>
                     </Link>

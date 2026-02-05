@@ -15,7 +15,13 @@ export default function OurTeamSection() {
                 <div className="flex flex-wrap items-center justify-center gap-10 md:gap-6 mt-24">
                     {team.map((member, index) => (
                         <AnimatedContent delay={index * 0.10} key={index} className="flex flex-col">
-                            <img src={member.image} alt={member.name} className="w-52 h-64 object-cover rounded-lg" />
+                            <img
+                                src={member.image}
+                                alt={member.name}
+                                className="w-52 h-64 object-cover rounded-lg"
+                                loading="lazy"
+                                decoding="async"
+                            />
                             <h3 className="text-lg font-medium mt-2">{member.name}</h3>
                             <p className="text-zinc-500">{member.role}</p>
                         </AnimatedContent>
