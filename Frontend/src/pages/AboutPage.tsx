@@ -218,7 +218,7 @@ export default function AboutPage() {
                                 delay={index * 0.1}
                                 className="bg-white p-6 rounded-xl border border-gray-200 flex items-center gap-4 hover:shadow-lg transition-all"
                             >
-                                <CheckCircleIcon className="w-6 h-6 text-teal-500 flex-shrink-0" />
+                                <CheckCircleIcon className="w-6 h-6 text-teal-500 shrink-0" />
                                 <span className="font-semibold text-slate-900">{cert}</span>
                             </AnimatedContent>
                         ))}
