@@ -44,7 +44,7 @@ export default function AboutPage() {
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-teal-50 via-blue-50 to-slate-50 px-4 md:px-16 lg:px-24 xl:px-32 pt-32 pb-20 border-b border-gray-200">
+            <section className="bg-linear-to-br from-teal-50 via-blue-50 to-slate-50 px-4 md:px-16 lg:px-24 xl:px-32 pt-32 pb-20 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <AnimatedContent>
@@ -146,7 +146,7 @@ export default function AboutPage() {
             </section>
 
             {/* Mission & Vision */}
-            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-gradient-to-br from-teal-50 to-blue-50 border-b border-gray-200">
+            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-linear-to-br from-teal-50 to-blue-50 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <AnimatedContent className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200">
@@ -191,7 +191,7 @@ export default function AboutPage() {
                                 delay={index * 0.1}
                                 className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                             >
-                                <div className="w-14 h-14 bg-gradient-to-br from-teal-100 to-blue-100 rounded-xl flex items-center justify-center mb-4">
+                                <div className="w-14 h-14 bg-linear-to-br from-teal-100 to-blue-100 rounded-xl flex items-center justify-center mb-4">
                                     <value.icon className="w-7 h-7 text-teal-600" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-3">{value.title}</h3>
@@ -203,7 +203,7 @@ export default function AboutPage() {
             </section>
 
             {/* Certifications & Expertise */}
-            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-gradient-to-br from-slate-50 to-gray-50 border-b border-gray-200">
+            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-linear-to-br from-slate-50 to-gray-50 border-b border-gray-200">
                 <div className="max-w-7xl mx-auto">
                     <AnimatedContent className="text-center mb-16">
                         <h2 className="text-4xl font-bold text-slate-900 mb-4 font-urbanist">Certifications & Expertise</h2>
@@ -227,7 +227,7 @@ export default function AboutPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-gradient-to-br from-teal-500 to-blue-600">
+            <section className="px-4 md:px-16 lg:px-24 xl:px-32 py-20 bg-linear-to-br from-teal-500 to-blue-600">
                 <div className="max-w-4xl mx-auto text-center">
                     <AnimatedContent>
                         <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-urbanist">
