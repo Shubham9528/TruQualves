@@ -30,11 +30,11 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
           <span>{post.publishDate}</span>
         </div>
         
-        <h3 className="font-bold text-lg text-slate-800 mb-3 line-clamp-2 leading-tight group-hover:text-teal-600 transition-colors">
+        <h3 className="font-bold text-base text-slate-800 mb-3 line-clamp-2 leading-tight group-hover:text-teal-600 transition-colors">
           {post.title}
         </h3>
         
-        <p className="text-slate-500 text-sm line-clamp-3 mb-6 flex-1">
+        <p className="text-slate-500 text-xs line-clamp-3 mb-6 flex-1">
           {post.excerpt}
         </p>
         

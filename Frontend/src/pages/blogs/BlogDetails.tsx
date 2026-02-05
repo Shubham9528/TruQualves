@@ -94,7 +94,7 @@ export default function BlogDetails() {
                             ))}
                         </div>
 
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 font-urbanist leading-tight">
+                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 font-urbanist leading-tight">
                             {post.title}
                         </h1>
 
@@ -120,9 +120,9 @@ export default function BlogDetails() {
                         />
                     </div>
 
-                    <div className="prose prose-lg prose-slate max-w-none">
-                        <h3 className="text-xl font-bold text-slate-800 mt-8 mb-3">Description</h3>
-                        <p className="text-xl text-slate-600 leading-relaxed mb-8 font-light">
+                    <div className="prose prose-base prose-slate max-w-none">
+                        <h3 className="text-lg font-bold text-slate-800 mt-8 mb-3">Description</h3>
+                        <p className="text-lg text-slate-600 leading-relaxed mb-8 font-light">
                             {post.description}
                         </p>
                         
@@ -130,14 +130,14 @@ export default function BlogDetails() {
                         <div className="space-y-6 text-gray-600">
                             {post.contentBody?.introduction && (
                                 <>
-                                    <h3 className="text-xl font-bold text-slate-800 mt-8 mb-3">Introduction</h3>
+                                    <h3 className="text-lg font-bold text-slate-800 mt-8 mb-3">Introduction</h3>
                                     <p>{post.contentBody.introduction}</p>
                                 </>
                             )}
 
                             {post.contentBody?.keyTakeaways && post.contentBody.keyTakeaways.length > 0 && (
                                 <>
-                                    <h3 className="text-xl font-bold text-slate-800 mt-8 mb-3">Key Takeaways</h3>
+                                    <h3 className="text-lg font-bold text-slate-800 mt-8 mb-3">Key Takeaways</h3>
                                     <ul className="list-disc pl-6 space-y-2">
                                         {post.contentBody.keyTakeaways.map((item, index) => (
                                             <li key={index}>{item}</li>
@@ -148,7 +148,7 @@ export default function BlogDetails() {
 
                             {post.contentBody?.elaborated && (
                                 <>
-                                    <h3 className="text-xl font-bold text-slate-800 mt-8 mb-3">Detailed Insights</h3>
+                                    <h3 className="text-lg font-bold text-slate-800 mt-8 mb-3">Detailed Insights</h3>
                                     <p>{post.contentBody.elaborated}</p>
                                 </>
                             )}
@@ -161,7 +161,7 @@ export default function BlogDetails() {
 
                             {post.contentBody?.conclusion && (
                                 <>
-                                    <h3 className="text-xl font-bold text-slate-800 mt-8 mb-3">Conclusion</h3>
+                                    <h3 className="text-lg font-bold text-slate-800 mt-8 mb-3">Conclusion</h3>
                                     <p>{post.contentBody.conclusion}</p>
                                 </>
                             )}
