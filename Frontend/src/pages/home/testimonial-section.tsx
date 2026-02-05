@@ -14,7 +14,7 @@ export default function TestimonialSection() {
                 />
                 <div className="flex flex-wrap gap-8 items-center justify-center mt-24">
                     {testimonials.map((testimonial, index) => (
-                        <AnimatedContent delay={index * 0.10} key={index} className={`p-6 rounded-xl max-w-80 shadow-[0_4px_20px_rgba(0,0,0,0.10)] ${index === 1 ? 'bg-gradient-to-br from-teal-50 to-blue-50 border border-gray-200' : 'bg-white'}`}>
+                        <AnimatedContent delay={index * 0.10} key={index} className={`p-6 rounded-xl max-w-80 shadow-[0_4px_20px_rgba(0,0,0,0.10)] ${index === 1 ? 'bg-linear-to-br from-teal-50 to-blue-50 border border-gray-200' : 'bg-white'}`}>
                             <div className="flex items-center gap-1">
                                 {Array(testimonial.rating).fill(0).map((_, i) => (
                                     <StarIcon key={i} className={`size-5 ${index === 1 ? 'fill-teal-500 text-teal-500' : 'fill-teal-500 text-teal-500'}`} />
