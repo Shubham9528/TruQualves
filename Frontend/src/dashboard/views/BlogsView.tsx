@@ -4,6 +4,7 @@ import { useBlogManagement } from '../hooks/useBlogManagement';
 import { BlogList } from '../components/blog/BlogList';
 import { BlogForm } from '../components/blog/BlogForm';
 import type { BackendBlog } from '../types';
+import ConfirmDialog from '../../components/confirm-dialog';
 
 const BlogsView: React.FC = () => {
     const { 
@@ -17,6 +18,9 @@ const BlogsView: React.FC = () => {
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingBlog, setEditingBlog] = useState<BackendBlog | null>(null);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [blogToDelete, setBlogToDelete] = useState<BackendBlog | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         fetchBlogs();
@@ -30,6 +34,23 @@ const BlogsView: React.FC = () => {
     const handleEdit = (blog: BackendBlog) => {
         setEditingBlog(blog);
         setIsFormOpen(true);
+    };
+
+    const handleDeleteRequest = (blog: BackendBlog) => {
+        setBlogToDelete(blog);
+        setIsConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!blogToDelete) return;
+        setIsDeleting(true);
+        try {
+            await deleteBlog(blogToDelete.id);
+        } finally {
+            setIsDeleting(false);
+            setIsConfirmOpen(false);
+            setBlogToDelete(null);
+        }
     };
 
     const handleFormSubmit = async (data: FormData, isEdit: boolean, id?: number) => {
@@ -61,7 +82,12 @@ const BlogsView: React.FC = () => {
                 blogs={blogs} 
                 isLoading={isLoading} 
                 onEdit={handleEdit} 
-                onDelete={deleteBlog} 
+                onDelete={(id) => {
+                    const blog = blogs.find((b) => b.id === id) || null;
+                    if (blog) {
+                        handleDeleteRequest(blog);
+                    }
+                }} 
             />
 
             {/* Modal Form Overlay */}
@@ -70,6 +96,21 @@ const BlogsView: React.FC = () => {
                 onClose={() => setIsFormOpen(false)} 
                 onSubmit={handleFormSubmit}
                 initialData={editingBlog}
+            />
+
+            <ConfirmDialog
+                open={isConfirmOpen}
+                title="Delete blog post?"
+                message={blogToDelete ? `This will permanently delete "${blogToDelete.title}".` : "This action cannot be undone."}
+                confirmLabel="Yes, delete"
+                cancelLabel="No, keep"
+                onConfirm={handleConfirmDelete}
+                onCancel={() => {
+                    if (isDeleting) return;
+                    setIsConfirmOpen(false);
+                    setBlogToDelete(null);
+                }}
+                isLoading={isDeleting}
             />
         </div>
     );

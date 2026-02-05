@@ -4,6 +4,7 @@ import { useAuth } from '../../context';
 import { ICONS } from '../constants';
 import type { User } from '../types';
 import { Atom } from 'react-loading-indicators';
+import ConfirmDialog from '../../components/confirm-dialog';
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,6 +14,13 @@ const UserManagementView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isRoleConfirmOpen, setIsRoleConfirmOpen] = useState(false);
+  const [roleChangeUser, setRoleChangeUser] = useState<User | null>(null);
+  const [roleChangeValue, setRoleChangeValue] = useState<'superadmin' | 'admin' | 'user' | null>(null);
+  const [isRoleUpdating, setIsRoleUpdating] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -127,27 +135,56 @@ const UserManagementView: React.FC = () => {
     }
   };
 
-  const handleDelete = async (userId: string) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) return;
+  const handleRoleChangeRequest = (user: User, newRole: 'superadmin' | 'admin' | 'user') => {
+    if (user.role === newRole) return;
+    setRoleChangeUser(user);
+    setRoleChangeValue(newRole);
+    setIsRoleConfirmOpen(true);
+  };
+
+  const handleConfirmRoleChange = async () => {
+    if (!roleChangeUser || !roleChangeValue) return;
+    setIsRoleUpdating(true);
+    try {
+      await handleRoleChange(roleChangeUser._id, roleChangeValue);
+    } finally {
+      setIsRoleUpdating(false);
+      setIsRoleConfirmOpen(false);
+      setRoleChangeUser(null);
+      setRoleChangeValue(null);
+    }
+  };
+
+  const handleDeleteRequest = (user: User) => {
+    setUserToDelete(user);
+    setIsConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
 
     try {
-      setActionLoading(userId);
+      setIsDeleting(true);
+      setActionLoading(userToDelete._id);
       const token = await currentUser?.getIdToken();
       if (!token) return;
 
-      await axios.delete(`${API_URL}/api/admin/users/${userId}`, {
+      await axios.delete(`${API_URL}/api/admin/users/${userToDelete._id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
-      setUsers(prev => prev.filter(u => u._id !== userId));
+      setUsers(prev => prev.filter(u => u._id !== userToDelete._id));
     } catch (err: unknown) {
       console.error('Error deleting user:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       alert('Failed to delete user: ' + errorMessage);
     } finally {
       setActionLoading(null);
+      setIsDeleting(false);
+      setIsConfirmOpen(false);
+      setUserToDelete(null);
     }
   };
 
@@ -234,7 +271,7 @@ const UserManagementView: React.FC = () => {
                       <td className="p-4">
                         <select 
                           value={user.role}
-                          onChange={(e) => handleRoleChange(user._id, e.target.value as 'superadmin' | 'admin' | 'user')}
+                          onChange={(e) => handleRoleChangeRequest(user, e.target.value as 'superadmin' | 'admin' | 'user')}
                           className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2"
                         >
                           <option value="user">User</option>
@@ -286,7 +323,7 @@ const UserManagementView: React.FC = () => {
                             </button>
                         )}
                         <button
-                          onClick={() => handleDelete(user._id)}
+                          onClick={() => handleDeleteRequest(user)}
                           disabled={actionLoading === user._id || user.role === 'superadmin'}
                           className="px-3 py-1.5 text-rose-700 hover:bg-rose-50 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
                         >
@@ -301,6 +338,45 @@ const UserManagementView: React.FC = () => {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={isConfirmOpen}
+        title="Delete user?"
+        message={
+          userToDelete
+            ? `This will permanently delete ${userToDelete.email}.`
+            : "This action cannot be undone."
+        }
+        confirmLabel="Yes, delete"
+        cancelLabel="No, keep"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          if (isDeleting) return;
+          setIsConfirmOpen(false);
+          setUserToDelete(null);
+        }}
+        isLoading={isDeleting}
+      />
+
+      <ConfirmDialog
+        open={isRoleConfirmOpen}
+        title="Change user role?"
+        message={
+          roleChangeUser && roleChangeValue
+            ? `Change ${roleChangeUser.email} to ${roleChangeValue}?`
+            : "This action cannot be undone."
+        }
+        confirmLabel="Yes, change"
+        cancelLabel="No, keep"
+        onConfirm={handleConfirmRoleChange}
+        onCancel={() => {
+          if (isRoleUpdating) return;
+          setIsRoleConfirmOpen(false);
+          setRoleChangeUser(null);
+          setRoleChangeValue(null);
+        }}
+        isLoading={isRoleUpdating}
+      />
     </div>
   );
 };
