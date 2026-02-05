@@ -79,7 +79,11 @@ export default function Navbar() {
                     </div>
                 </nav>
             
-            <div className={`fixed top-0 right-0 z-60 w-full bg-white shadow-xl shadow-black/5 transition-all duration-300 ease-in-out ${isMenuOpen ? "h-92 overflow-hidden" : "h-0 overflow-hidden"}`}>
+            <div
+                className={`fixed top-0 right-0 z-60 w-full bg-white shadow-xl shadow-black/5 transition-all duration-300 ease-in-out ${
+                    isMenuOpen ? "max-h-screen overflow-y-auto" : "max-h-0 overflow-hidden"
+                }`}
+            >
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-2">
                         <img
