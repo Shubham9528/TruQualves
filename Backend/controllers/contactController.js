@@ -1,4 +1,5 @@
 import { sendContactEmail } from "../services/emailService.js";
+import Event from "../model/Event.js";
 import dotenv from "dotenv";
 dotenv.config();
 export const handleContactForm = async (req, res) => {
@@ -13,6 +14,17 @@ export const handleContactForm = async (req, res) => {
         message: "Please fill in all required fields",
       });
     }
+
+    // Create event record with default status "new_request"
+    await Event.create({
+      firstName,
+      lastName,
+      email,
+      company,
+      phone,
+      service,
+      message,
+    });
 
     // Send email
     await sendContactEmail(req.body);

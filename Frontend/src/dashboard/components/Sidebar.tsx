@@ -22,6 +22,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
   // Add Users menu for admins
   if (userProfile?.role === 'admin' || userProfile?.role === 'superadmin') {
     mainNavItems.push({ label: 'Users', icon: 'Users' });
+    mainNavItems.push({ label: 'Events', icon: 'Bell' });
   }
 
   const secondaryNavItems: { label: ViewType; icon: keyof typeof ICONS }[] = [

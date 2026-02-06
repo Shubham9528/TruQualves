@@ -4,6 +4,7 @@ import contactRoutes from "./routes/contactRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import eventsRoutes from "./routes/eventsRoutes.js";
 import connectDB from "./services/mongodbService.js";
 import corsMiddleware from "./middleware/corsMiddleware.js";
 dotenv.config();
@@ -28,6 +29,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/events", eventsRoutes);
 
 // Start server
 app.listen(port, () => {
