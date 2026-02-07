@@ -82,7 +82,7 @@ const App: React.FC = () => {
         ${isSidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
         <Header activeView={activeView} toggleSidebar={toggleSidebar} />
         
-        <main className="p-4 md:p-8 max-w-7xl mx-auto">
+        <main className={`p-4 md:p-8 w-full ${activeView === 'Events' ? 'max-w-none' : 'max-w-7xl mx-auto'}`}>
           {renderContent()}
         </main>
       </div>

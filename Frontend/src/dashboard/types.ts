@@ -57,6 +57,13 @@ export interface BackendBlog {
 
 export type EventStatus = 'new_request' | 'active' | 'completed' | 'cancelled';
 
+export const EVENT_STATUS_OPTIONS: { value: EventStatus; label: string }[] = [
+  { value: 'new_request', label: 'New Request' },
+  { value: 'active', label: 'Active' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
+
 export interface BackendEvent {
   _id: string;
   firstName: string;
