@@ -19,9 +19,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
     { label: 'Blogs', icon: 'BookOpen' }
   ];
 
-  // Add Users menu for admins
-  if (userProfile?.role === 'admin' || userProfile?.role === 'superadmin') {
+  // Add Users menu for superadmin only
+  if (userProfile?.role === 'superadmin') {
     mainNavItems.push({ label: 'Users', icon: 'Users' });
+  }
+
+  // Add Events menu for admin and superadmin
+  if (userProfile?.role === 'admin' || userProfile?.role === 'superadmin') {
     mainNavItems.push({ label: 'Events', icon: 'Bell' });
   }
 

@@ -10,8 +10,8 @@ import { verifyToken, requireRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Middleware: All admin routes require authentication AND 'admin' or 'superadmin' role
-router.use(verifyToken, requireRole(["admin", "superadmin"]));
+// Middleware: All admin routes require authentication AND 'superadmin' role
+router.use(verifyToken, requireRole(["superadmin"]));
 
 // Routes
 router.get("/users", getUsers); // ?status=pending
