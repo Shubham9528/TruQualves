@@ -10,6 +10,7 @@ interface EventsTableProps {
   onRefresh: () => void;
   onStatusChange: (eventId: string, status: EventStatus) => void;
   onDelete: (eventId: string) => void;
+  onMessage: (eventId: string) => void;
   loading: boolean;
   error: string;
   actionLoading: string | null;
@@ -22,6 +23,7 @@ const EventsTable: React.FC<EventsTableProps> = ({
   onRefresh,
   onStatusChange,
   onDelete,
+  onMessage,
   loading,
   error,
   actionLoading,
@@ -82,6 +84,7 @@ const EventsTable: React.FC<EventsTableProps> = ({
                 <th className="px-6 py-3 font-semibold">Company</th>
                 <th className="px-6 py-3 font-semibold">Date</th>
                 <th className="px-6 py-3 font-semibold">Status</th>
+                <th className="px-6 py-3 font-semibold text-center">Message</th>
                 <th className="px-6 py-3 font-semibold text-right">Action</th>
               </tr>
             </thead>
@@ -118,6 +121,16 @@ const EventsTable: React.FC<EventsTableProps> = ({
                         ))}
                       </select>
                     </div>
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <button
+                      type="button"
+                      onClick={() => onMessage(event._id)}
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-500 hover:bg-slate-100"
+                      title="View message"
+                    >
+                      <ICONS.MessageSquare size={18} />
+                    </button>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button

@@ -29,6 +29,8 @@ const EventsView: React.FC = () => {
   const [pendingStatus, setPendingStatus] = useState<EventStatus | null>(null);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [messageContent, setMessageContent] = useState<string>('');
 
   const requestStatusChange = (eventId: string, status: EventStatus) => {
     setPendingEventId(eventId);
@@ -65,6 +67,17 @@ const EventsView: React.FC = () => {
   const handleCancelDelete = () => {
     setIsDeleteConfirmOpen(false);
     setPendingDeleteId(null);
+  };
+
+  const handleOpenMessage = (eventId: string) => {
+    const selected = events.find((event) => event._id === eventId);
+    setMessageContent(selected?.message || 'No message provided.');
+    setIsMessageOpen(true);
+  };
+
+  const handleCloseMessage = () => {
+    setIsMessageOpen(false);
+    setMessageContent('');
   };
 
   useEffect(() => {
@@ -123,6 +136,7 @@ const EventsView: React.FC = () => {
             onRefresh={fetchEvents}
             onStatusChange={requestStatusChange}
             onDelete={requestDelete}
+            onMessage={handleOpenMessage}
             loading={loading}
             error={error}
             actionLoading={actionLoading}
@@ -150,6 +164,17 @@ const EventsView: React.FC = () => {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
         isLoading={Boolean(actionLoading)}
+      />
+
+      <ConfirmDialog
+        open={isMessageOpen}
+        title="Client Message"
+        message={messageContent}
+        confirmLabel="Close"
+        hideCancel={true}
+        onConfirm={handleCloseMessage}
+        onCancel={handleCloseMessage}
+        isLoading={false}
       />
     </div>
   );

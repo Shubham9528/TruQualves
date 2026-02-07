@@ -18,7 +18,8 @@ import {
   LogOut,
   Menu,
   X,
-  Trash2
+  Trash2,
+  MessageSquare
 } from 'lucide-react';
 import type { KPI, Activity as ActivityItem, BlogPost } from './types';
 
@@ -121,5 +122,6 @@ export const ICONS = {
   LogOut,
   Menu,
   X,
-  Trash2
+  Trash2,
+  MessageSquare
 };
