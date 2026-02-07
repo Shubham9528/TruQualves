@@ -1,5 +1,5 @@
 import express from "express";
-import { getEvents, updateEventStatus, getEventsSummary } from "../controllers/eventsController.js";
+import { getEvents, updateEventStatus, getEventsSummary, deleteEvent } from "../controllers/eventsController.js";
 import { verifyToken, requireRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -15,5 +15,6 @@ router.use(requireRole(["admin", "superadmin"]));
 
 router.get("/", getEvents);
 router.patch("/:id/status", updateEventStatus);
+router.delete("/:id", deleteEvent);
 
 export default router;

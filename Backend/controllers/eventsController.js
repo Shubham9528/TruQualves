@@ -52,6 +52,24 @@ export const updateEventStatus = async (req, res) => {
   }
 };
 
+// @desc    Delete an event
+// @route   DELETE /api/events/:id
+// @access  Private (Admin/Superadmin)
+export const deleteEvent = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndDelete(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json({ success: true, message: "Event deleted" });
+  } catch (error) {
+    console.error("Delete Event Error:", error);
+    res.status(500).json({ message: "Server Error deleting event" });
+  }
+};
+
 // @desc    Get event summary for dashboard (all authenticated users)
 // @route   GET /api/events/summary
 // @access  Private (Any authenticated user)

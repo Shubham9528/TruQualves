@@ -9,6 +9,7 @@ interface EventsTableProps {
   statusTone: string;
   onRefresh: () => void;
   onStatusChange: (eventId: string, status: EventStatus) => void;
+  onDelete: (eventId: string) => void;
   loading: boolean;
   error: string;
   actionLoading: string | null;
@@ -20,6 +21,7 @@ const EventsTable: React.FC<EventsTableProps> = ({
   statusTone,
   onRefresh,
   onStatusChange,
+  onDelete,
   loading,
   error,
   actionLoading,
@@ -122,7 +124,8 @@ const EventsTable: React.FC<EventsTableProps> = ({
                       type="button"
                       className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-rose-500 hover:bg-rose-50"
                       title="Delete"
-                      disabled
+                      disabled={actionLoading === event._id}
+                      onClick={() => onDelete(event._id)}
                     >
                       <ICONS.Trash2 size={18} />
                     </button>
@@ -154,4 +157,3 @@ const EventsTable: React.FC<EventsTableProps> = ({
 };
 
 export default EventsTable;
-

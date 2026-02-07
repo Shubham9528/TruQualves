@@ -21,12 +21,14 @@ const STATUS_TABS: { key: EventStatus; label: string }[] = [
 ];
 
 const EventsView: React.FC = () => {
-  const { events, loading, error, actionLoading, fetchEvents, updateEventStatus } = useEventManagement();
+  const { events, loading, error, actionLoading, fetchEvents, updateEventStatus, deleteEvent } = useEventManagement();
   const [activeStatus, setActiveStatus] = useState<EventStatus>('new_request');
   const [searchTerm, setSearchTerm] = useState('');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [pendingEventId, setPendingEventId] = useState<string | null>(null);
   const [pendingStatus, setPendingStatus] = useState<EventStatus | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const requestStatusChange = (eventId: string, status: EventStatus) => {
     setPendingEventId(eventId);
@@ -46,6 +48,23 @@ const EventsView: React.FC = () => {
     setIsConfirmOpen(false);
     setPendingEventId(null);
     setPendingStatus(null);
+  };
+
+  const requestDelete = (eventId: string) => {
+    setPendingDeleteId(eventId);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    await deleteEvent(pendingDeleteId);
+    setIsDeleteConfirmOpen(false);
+    setPendingDeleteId(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirmOpen(false);
+    setPendingDeleteId(null);
   };
 
   useEffect(() => {
@@ -103,6 +122,7 @@ const EventsView: React.FC = () => {
             statusTone={STATUS_META[activeStatus].tone}
             onRefresh={fetchEvents}
             onStatusChange={requestStatusChange}
+            onDelete={requestDelete}
             loading={loading}
             error={error}
             actionLoading={actionLoading}
@@ -118,6 +138,17 @@ const EventsView: React.FC = () => {
         cancelLabel="No, keep"
         onConfirm={handleConfirmStatusChange}
         onCancel={handleCancelStatusChange}
+        isLoading={Boolean(actionLoading)}
+      />
+
+      <ConfirmDialog
+        open={isDeleteConfirmOpen}
+        title="Delete event?"
+        message="This will permanently delete the event."
+        confirmLabel="Yes, delete"
+        cancelLabel="No, keep"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
         isLoading={Boolean(actionLoading)}
       />
     </div>

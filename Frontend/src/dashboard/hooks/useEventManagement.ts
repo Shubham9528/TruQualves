@@ -73,6 +73,31 @@ export const useEventManagement = () => {
     [currentUser],
   );
 
+  const deleteEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        setActionLoading(eventId);
+        const token = await currentUser?.getIdToken();
+        if (!token) return;
+
+        await axios.delete(`${API_URL}/api/events/${eventId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setEvents((prev) => prev.filter((event) => event._id !== eventId));
+      } catch (err: unknown) {
+        console.error('Error deleting event:', err);
+        const message = err instanceof Error ? err.message : 'Failed to delete event';
+        alert(`Failed to delete event: ${message}`);
+      } finally {
+        setActionLoading(null);
+      }
+    },
+    [currentUser],
+  );
+
   return {
     events,
     loading,
@@ -80,5 +105,6 @@ export const useEventManagement = () => {
     actionLoading,
     fetchEvents,
     updateEventStatus,
+    deleteEvent,
   };
 };
