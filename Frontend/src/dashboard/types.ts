@@ -55,7 +55,7 @@ export interface BackendBlog {
   };
 }
 
-export type EventStatus = 'new_request' | 'active' | 'completed';
+export type EventStatus = 'new_request' | 'active' | 'completed' | 'cancelled';
 
 export interface BackendEvent {
   _id: string;

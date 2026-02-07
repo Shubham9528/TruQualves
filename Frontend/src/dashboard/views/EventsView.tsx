@@ -8,6 +8,7 @@ const STATUS_META: Record<EventStatus, { label: string; tone: string }> = {
   new_request: { label: 'New Request', tone: 'bg-amber-50 text-amber-700 border-amber-100' },
   active: { label: 'Active', tone: 'bg-teal-50 text-teal-700 border-teal-100' },
   completed: { label: 'Completed', tone: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+  cancelled: { label: 'Cancelled', tone: 'bg-slate-100 text-slate-600 border-slate-200' },
 };
 
 const EventsView: React.FC = () => {
@@ -46,6 +47,7 @@ const EventsView: React.FC = () => {
       new_request: events.filter((e) => e.status === 'new_request'),
       active: events.filter((e) => e.status === 'active'),
       completed: events.filter((e) => e.status === 'completed'),
+      cancelled: events.filter((e) => e.status === 'cancelled'),
     };
   }, [events]);
 
@@ -128,6 +130,7 @@ const EventsView: React.FC = () => {
                           <option value="new_request">New Request</option>
                           <option value="active">Active</option>
                           <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
                         </select>
                       </div>
                     </div>

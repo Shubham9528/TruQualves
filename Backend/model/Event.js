@@ -39,7 +39,7 @@ const eventSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["new_request", "active", "completed"],
+      enum: ["new_request", "active", "completed", "cancelled"],
       default: "new_request",
       index: true,
     },

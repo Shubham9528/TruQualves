@@ -1,6 +1,6 @@
 import Event from "../model/Event.js";
 
-const VALID_STATUSES = ["new_request", "active", "completed"];
+const VALID_STATUSES = ["new_request", "active", "completed", "cancelled"];
 
 // @desc    Get events (optional status filter)
 // @route   GET /api/events?status=new_request
