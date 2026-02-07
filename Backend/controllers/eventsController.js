@@ -51,3 +51,33 @@ export const updateEventStatus = async (req, res) => {
     res.status(500).json({ message: "Server Error updating event status" });
   }
 };
+
+// @desc    Get event summary for dashboard (all authenticated users)
+// @route   GET /api/events/summary
+// @access  Private (Any authenticated user)
+export const getEventsSummary = async (req, res) => {
+  try {
+    const events = await Event.find({})
+      .sort({ createdAt: -1 })
+      .select("firstName lastName service company status createdAt");
+
+    const total = events.length;
+    const active = events.filter((e) => e.status === "active").length;
+    const completed = events.filter((e) => e.status === "completed").length;
+    const complianceScore = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+    res.status(200).json({
+      success: true,
+      totals: {
+        total,
+        active,
+        completed,
+        complianceScore,
+      },
+      events,
+    });
+  } catch (error) {
+    console.error("Get Events Summary Error:", error);
+    res.status(500).json({ message: "Server Error fetching summary" });
+  }
+};

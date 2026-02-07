@@ -76,3 +76,10 @@ export interface BackendEvent {
   status: EventStatus;
   createdAt: string;
 }
+
+export interface EventSummaryTotals {
+  total: number;
+  active: number;
+  completed: number;
+  complianceScore: number;
+}
