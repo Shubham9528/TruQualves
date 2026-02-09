@@ -38,6 +38,9 @@ export const sendContactEmail = async (formData) => {
 // Send approval request email to superadmin
 export const sendApprovalRequestEmail = async (superadminEmail, user) => {
   if (!superadminEmail) return;
+
+  const dashboardBase =process.env.CORS_ORIGINS;
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: superadminEmail,
@@ -49,6 +52,8 @@ export const sendApprovalRequestEmail = async (superadminEmail, user) => {
       <p><strong>Email:</strong> ${user?.email || "N/A"}</p>
       <p><strong>Status:</strong> ${user?.status || "pending"}</p>
       <p>Please review and approve/reject this request in the Dashboard panel.</p>
+      <p>You can now log in and access the dashboard.</p>
+      ${dashboardBase ? `<p><a href="${dashboardBase}/dashboard">Click Here</a></p>` : ""}
     `,
   };
 
@@ -58,16 +63,19 @@ export const sendApprovalRequestEmail = async (superadminEmail, user) => {
 // Send approval granted email to user
 export const sendApprovalGrantedEmail = async (user) => {
   if (!user?.email) return;
-
+  const dashboardBase =process.env.CORS_ORIGINS;
+    
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: user.email,
     subject: "Your Dashboard Access Has Been Approved",
     html: `
       <h2>Access Approved</h2>
-      <p>Hello${user?.email ? ` ${user.email}` : ""},</p>
+      <p>Hello${user?.name ? ` ${user.name}` : ""},</p>
+      <p><strong>Email:</strong> ${user.email}</p>
       <p>Your request for dashboard access has been approved.</p>
       <p>You can now log in and access the dashboard.</p>
+      ${dashboardBase ? `<p><a href="${dashboardBase}/dashboard">Click Here</a></p>` : ""}
     `,
   };
 
