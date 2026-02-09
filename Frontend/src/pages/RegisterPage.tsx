@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,7 +29,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(email, password);
+      await register(email, password, name);
       navigate('/approval-pending');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to create account. Please try again.';
@@ -53,6 +54,15 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit}>
+          <input
+            id="name"
+            className="w-full bg-transparent border my-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
+            type="text"
+            placeholder="Enter your full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <input
             id="email"
             className="w-full bg-transparent border my-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"

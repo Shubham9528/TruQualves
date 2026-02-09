@@ -1,4 +1,5 @@
 import User from "../model/User.js";
+import { sendApprovalGrantedEmail } from "../services/emailService.js";
 
 // @desc    Get all users (with optional status filter)
 // @route   GET /api/admin/users
@@ -32,6 +33,13 @@ export const approveUser = async (req, res) => {
     user.status = "approved";
     // Optional: Set default approved role if needed, or keep existing 'user'
     await user.save();
+
+    // Notify user
+    try {
+      await sendApprovalGrantedEmail(user);
+    } catch (emailError) {
+      console.error("Approval granted email error:", emailError);
+    }
 
     res
       .status(200)

@@ -34,3 +34,42 @@ export const sendContactEmail = async (formData) => {
 
   await transporter.sendMail(mailOptions);
 };
+
+// Send approval request email to superadmin
+export const sendApprovalRequestEmail = async (superadminEmail, user) => {
+  if (!superadminEmail) return;
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: superadminEmail,
+    subject: "New Dashboard Access Request",
+    html: `
+      <h2>New Dashboard Access Request</h2>
+      <p>A new user has requested access to the dashboard.</p>
+      <p><strong>Name:</strong> ${user?.name || "N/A"}</p>
+      <p><strong>Email:</strong> ${user?.email || "N/A"}</p>
+      <p><strong>Status:</strong> ${user?.status || "pending"}</p>
+      <p>Please review and approve/reject this request in the Dashboard panel.</p>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// Send approval granted email to user
+export const sendApprovalGrantedEmail = async (user) => {
+  if (!user?.email) return;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: "Your Dashboard Access Has Been Approved",
+    html: `
+      <h2>Access Approved</h2>
+      <p>Hello${user?.email ? ` ${user.email}` : ""},</p>
+      <p>Your request for dashboard access has been approved.</p>
+      <p>You can now log in and access the dashboard.</p>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};

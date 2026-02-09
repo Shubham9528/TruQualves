@@ -5,6 +5,7 @@ import {
   signOut as firebaseSignOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
   GoogleAuthProvider,
   signInWithPopup
 } from 'firebase/auth';
@@ -44,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Sync user with MongoDB (called after signup or first login)
-  const syncUserWithBackend = async (user: FirebaseUser): Promise<void> => {
+  const syncUserWithBackend = async (user: FirebaseUser, name?: string): Promise<void> => {
     try {
       const token = await user.getIdToken();
       const response = await fetch(`${API_URL}/api/auth/sync`, {
@@ -53,6 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(name ? { name } : {}),
       });
 
       if (!response.ok) {
@@ -86,11 +88,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Register function
-  const register = async (email: string, password: string): Promise<void> => {
+  const register = async (email: string, password: string, name?: string): Promise<void> => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (name) {
+        await updateProfile(userCredential.user, { displayName: name });
+      }
       // Sync with backend immediately after registration
-      await syncUserWithBackend(userCredential.user);
+      await syncUserWithBackend(userCredential.user, name);
       // onAuthStateChanged will handle fetching the profile
     } catch (error) {
       console.error('Registration error:', error);

@@ -1,23 +1,35 @@
 import User from "../model/User.js";
+import { sendApprovalRequestEmail } from "../services/emailService.js";
 
 // @desc    Sync user from Firebase to MongoDB
 // @route   POST /api/auth/sync
 // @access  Private (Firebase Token)
 export const syncUser = async (req, res) => {
   try {
-    const { uid, email } = req.user; // from verifyToken middleware
+    const { uid, email, name, displayName } = req.user; // from verifyToken middleware
+    const providedName = req.body?.name;
+    const resolvedName = providedName || name || displayName;
 
     let user = await User.findOne({ firebaseUid: uid });
 
     if (!user) {
       try {
         // Create new user if not exists
-        user = await User.create({
-          firebaseUid: uid,
-          email: email,
-          role: "user", // Default role
-          status: "pending", // Default status
-        });
+          user = await User.create({
+            firebaseUid: uid,
+            email: email,
+            name: resolvedName,
+            role: "user", // Default role
+            status: "pending", // Default status
+          });
+        // Notify superadmin for approval
+        try {
+          const superadmin = await User.findOne({ role: "superadmin" });
+          await sendApprovalRequestEmail(superadmin?.email, user);
+        } catch (emailError) {
+          console.error("Approval email error:", emailError);
+        }
+
         return res.status(201).json({ success: true, user, isNew: true });
       } catch (error) {
         // Handle duplicate key error (Race condition)
@@ -27,6 +39,12 @@ export const syncUser = async (req, res) => {
         }
         throw error;
       }
+    }
+
+    // Update missing name if provided
+    if (!user.name && resolvedName) {
+      user.name = resolvedName;
+      await user.save();
     }
 
     // Return existing user
