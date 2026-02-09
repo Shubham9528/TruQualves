@@ -273,7 +273,8 @@ const UserManagementView: React.FC = () => {
                         <select 
                           value={user.role}
                           onChange={(e) => handleRoleChangeRequest(user, e.target.value as 'superadmin' | 'admin' | 'user')}
-                          className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2"
+                          disabled={user.role === 'superadmin'}
+                          className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2 disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                           <option value="user">User</option>
                           <option value="admin">Admin</option>
