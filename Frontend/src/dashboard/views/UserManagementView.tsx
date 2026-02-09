@@ -260,8 +260,12 @@ const UserManagementView: React.FC = () => {
                     <tr key={user._id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="p-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 font-bold text-sm">
-                            {user.email.substring(0, 2).toUpperCase()}
+                          <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center text-teal-600 font-bold text-sm overflow-hidden">
+                            {user.photoURL ? (
+                              <img src={user.photoURL} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                              <span>{user.email.substring(0, 2).toUpperCase()}</span>
+                            )}
                           </div>
                           <div>
                             <p className="font-medium text-slate-800">{user.email}</p>

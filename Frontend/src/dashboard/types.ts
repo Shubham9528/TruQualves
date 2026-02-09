@@ -31,6 +31,7 @@ export type ViewType = 'Dashboard' | 'Blogs' | 'Users' | 'Events' | 'Settings' |
 export interface User {
   _id: string;
   name?: string;
+  photoURL?: string;
   email: string;
   role: 'superadmin' | 'admin' | 'user';
   status: 'pending' | 'approved' | 'rejected';
