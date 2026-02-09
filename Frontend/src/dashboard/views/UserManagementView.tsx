@@ -21,6 +21,7 @@ const UserManagementView: React.FC = () => {
   const [roleChangeUser, setRoleChangeUser] = useState<User | null>(null);
   const [roleChangeValue, setRoleChangeValue] = useState<'superadmin' | 'admin' | 'user' | null>(null);
   const [isRoleUpdating, setIsRoleUpdating] = useState(false);
+  const superadminId = users.find((u) => u.role === 'superadmin')?._id;
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -276,7 +277,12 @@ const UserManagementView: React.FC = () => {
                         >
                           <option value="user">User</option>
                           <option value="admin">Admin</option>
-                          <option value="superadmin">Super Admin</option>
+                          <option
+                            value="superadmin"
+                            disabled={Boolean(superadminId) && superadminId !== user._id}
+                          >
+                            Super Admin
+                          </option>
                         </select>
                       </td>
                       <td className="p-4">

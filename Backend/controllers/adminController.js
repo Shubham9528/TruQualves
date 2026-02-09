@@ -82,6 +82,18 @@ export const updateUserRole = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (role === "superadmin") {
+      const existingSuperadmin = await User.findOne({
+        role: "superadmin",
+        _id: { $ne: user._id },
+      });
+      if (existingSuperadmin) {
+        return res
+          .status(400)
+          .json({ message: "Only one superadmin is allowed" });
+      }
+    }
+
     user.role = role;
     await user.save();
 
